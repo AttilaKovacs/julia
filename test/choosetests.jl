@@ -205,5 +205,5 @@ function choosetests(choices = [])
         empty!(tests)
     end
 
-    tests, net_on, exit_on_error, use_revise, seed
+    return (; tests, net_on, exit_on_error, use_revise, seed)
 end
