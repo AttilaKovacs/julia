@@ -9,6 +9,7 @@ using Base: Experimental
 
 include("choosetests.jl")
 include("testenv.jl")
+include("testutils.jl")
 
 tests, net_on, exit_on_error, use_revise, seed = choosetests(ARGS)
 tests = unique(tests)
@@ -329,7 +330,7 @@ cd(@__DIR__) do
     end
 
     #=
-`   Construct a testset on the master node which will hold results from all the
+    Construct a testset on the master node which will hold results from all the
     test files run on workers and on node1. The loop goes through the results,
     inserting them as children of the overall testset if they are testsets,
     handling errors otherwise.
@@ -400,6 +401,7 @@ cd(@__DIR__) do
     Test.TESTSET_PRINT_ENABLE[] = true
     println()
     Test.print_test_results(o_ts, 1)
+
     if !o_ts.anynonpass
         println("    \033[32;1mSUCCESS\033[0m")
     else
@@ -408,6 +410,7 @@ cd(@__DIR__) do
             println("$skipped test", skipped > 1 ? "s were" : " was", " skipped due to failure.")
         println("The global RNG seed was 0x$(string(seed, base = 16)).\n")
         Test.print_test_errors(o_ts)
+        TestUtils.write_failed_testsets_if_requested(o_ts)
         throw(Test.FallbackTestSetException("Test run finished with errors"))
     end
 end
