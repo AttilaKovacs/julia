@@ -401,7 +401,6 @@ cd(@__DIR__) do
     Test.TESTSET_PRINT_ENABLE[] = true
     println()
     Test.print_test_results(o_ts, 1)
-
     if !o_ts.anynonpass
         println("    \033[32;1mSUCCESS\033[0m")
     else
